@@ -1,6 +1,5 @@
 let appid = '10207dcb3a245bc5201ad3e3a6420064';
 
-
 document.getElementById('searchBtn').addEventListener('click', event => {
 event.preventDefault();
 document.getElementById('cardItem').style.visibility = 'visible';
@@ -9,13 +8,13 @@ let coordinates = [];
   fetch(`http://api.openweathermap.org/data/2.5/weather?q=${document.getElementById('search').value}&appid=${appid}`)
     .then(r => r.json())
     .then(data => {
-      console.log(data)
+     
      coordinates.push(data.coord.lon);
      coordinates.push(data.coord.lat);
 
      fahrenheit = kelvinToFahrenheit(Number(data.main.temp))
 
-     document.getElementById('cityName').textContent = data.name;
+     document.getElementById('cityName').textContent = data.name + ' ' + moment.unix(data.dt).format('MM/DD/YYYY');
      document.getElementById('temp').textContent = fahrenheit;
      document.getElementById('humid').textContent = data.main.humidity;
      document.getElementById('windSpd').textContent = data.wind.speed
