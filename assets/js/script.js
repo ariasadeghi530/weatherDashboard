@@ -37,9 +37,18 @@ let coordinates = [];
      
         fetch(`http://api.openweathermap.org/data/2.5/forecast?appid=${appid}&lat=${coordinates[1]}&lon=${coordinates[0]}`)
           .then(r => r.json())
-          .then(data => {
-      
-            console.log(data);
+          .then(({list}) => {
+            console.log(list)
+            for (let i = 1; i < 6; i++){
+            let forecastCard = document.createElement('div');
+            forecastCard.classList = 'col s2';
+            forecastCard.innerHTML = `
+            <div class="card small blue">
+               <h6>${moment.unix(list[(i * 5) + 3].dt).format("MM/DD/YYYY")}</h6>    
+            </div>
+            ` 
+            document.getElementById('forecast').append(forecastCard); 
+            }          
           })
           .catch(e => console.error(e));
     })
