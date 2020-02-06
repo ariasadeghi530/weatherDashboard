@@ -51,13 +51,13 @@ let coordinates = [];
             heading.textContent = '5-Day Forecast: ';
 
             document.getElementById('forecast').append(heading);
-
+            console.log(list);
             for (let i = 0; i < list.length; i++){
-
+              console.log(list[i].dt)
             let date = moment.unix(list[i].dt).format("MM/DD/YYYY");
             
-
-            if ((date === todayDate) || date === moment.unix(list[i - 1].dt).format("MM/DD/YYYY")){
+              console.log(list[i])
+              if ((date === todayDate) || (i > 0 && (date === moment.unix((list[i - 1].dt)).format("MM/DD/YYYY")))) {
               
               continue;
 
