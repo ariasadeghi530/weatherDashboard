@@ -3,18 +3,23 @@ let appid = '10207dcb3a245bc5201ad3e3a6420064';
 document.getElementById('searchBtn').addEventListener('click', event => {
 event.preventDefault();
 document.getElementById('cardItem').style.visibility = 'visible';
+let todayDate;
 
 let coordinates = [];
   fetch(`http://api.openweathermap.org/data/2.5/weather?q=${document.getElementById('search').value}&appid=${appid}`)
     .then(r => r.json())
     .then(data => {
-     
+     console.log(data);
      coordinates.push(data.coord.lon);
      coordinates.push(data.coord.lat);
 
      fahrenheit = kelvinToFahrenheit(Number(data.main.temp))
 
-     document.getElementById('cityName').textContent = data.name + ' ' + moment.unix(data.dt).format('MM/DD/YYYY');
+     todayDate = moment.unix(data.dt).format('MM/DD/YYYY');
+
+     document.getElementById('cityName').textContent = data.name + ' ' + todayDate;
+     document.getElementById('weatherImg').src = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+     document.getElementById('weatherImg').alt = `${data.weather[0].main}`;
      document.getElementById('temp').textContent = fahrenheit;
      document.getElementById('humid').textContent = data.main.humidity;
      document.getElementById('windSpd').textContent = data.wind.speed
@@ -38,22 +43,51 @@ let coordinates = [];
         fetch(`http://api.openweathermap.org/data/2.5/forecast?appid=${appid}&lat=${coordinates[1]}&lon=${coordinates[0]}`)
           .then(r => r.json())
           .then(({list}) => {
-            console.log(list)
-            for (let i = 1; i < 6; i++){
+            
+            document.getElementById('forecast').innerHTML = ''; 
+            
+            let heading = document.createElement('h5');
+            heading.textContent = '5-Day Forecast: ';
+
+            document.getElementById('forecast').append(heading);
+
+            for (let i = 0; i < list.length; i++){
+
+            let date = moment.unix(list[i].dt).format("MM/DD/YYYY");
+            
+
+            if ((date === todayDate) || date === moment.unix(list[i - 1].dt).format("MM/DD/YYYY")){
+              
+              continue;
+
+            } else {
+
+            console.log(list[i].weather[0].icon);
             let forecastCard = document.createElement('div');
-            forecastCard.classList = 'col s2';
+            let tempFahr = kelvinToFahrenheit(Number(list[i].main.temp))
+
+            forecastCard.classList = 'col s3';
             forecastCard.innerHTML = `
-            <div class="card small blue">
-               <h6>${moment.unix(list[(i * 5) + 3].dt).format("MM/DD/YYYY")}</h6>    
+            <div class="card horizontal blue">
+            <div class="card-content black-text">  
+               <h6><strong>${moment.unix(list[i].dt).format("MM/DD/YYYY")}</strong></h6> 
+               <img src="http://openweathermap.org/img/wn/${list[i].weather[0].icon}@2x.png" alt='${list[i].weather[0].description}' id='img'>
+               <h6>Temp: ${tempFahr}°F</h6>
+               <h6>Humidity: ${list[i].main.humidity}%</h6>
+            </div>   
             </div>
             ` 
+
             document.getElementById('forecast').append(forecastCard); 
-            }          
+            }  
+          }
+
           })
+
           .catch(e => console.error(e));
     })
-    .catch(e => console.error(e))
 
+    .catch(e => console.error(e))
 
 })
 
