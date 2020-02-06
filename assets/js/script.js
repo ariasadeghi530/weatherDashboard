@@ -6,10 +6,10 @@ document.getElementById('cardItem').style.visibility = 'visible';
 let todayDate;
 
 let coordinates = [];
-  fetch(`http://api.openweathermap.org/data/2.5/weather?q=${document.getElementById('search').value}&appid=${appid}`)
+  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${document.getElementById('search').value}&appid=${appid}`)
     .then(r => r.json())
     .then(data => {
-     console.log(data);
+     
      coordinates.push(data.coord.lon);
      coordinates.push(data.coord.lat);
 
@@ -18,7 +18,7 @@ let coordinates = [];
      todayDate = moment.unix(data.dt).format('MM/DD/YYYY');
 
      document.getElementById('cityName').textContent = data.name + ' ' + todayDate;
-     document.getElementById('weatherImg').src = `http://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
+     document.getElementById('weatherImg').src = `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
      document.getElementById('weatherImg').alt = `${data.weather[0].main}`;
      document.getElementById('temp').textContent = fahrenheit;
      document.getElementById('humid').textContent = data.main.humidity;
@@ -29,10 +29,11 @@ let coordinates = [];
      <a href="#!" class="collection-item" id=${data.name}>${data.name}</a>
      `
      document.getElementById('collections').append(cityLink);
+     localStorage.setItem(`${data.name}`, `${data.name}`)
 
      document.getElementById('search').value = '';
 
-      fetch(`http://api.openweathermap.org/data/2.5/uvi?appid=${appid}&lat=${coordinates[1]}&lon=${coordinates[0]}`)
+      fetch(`https://api.openweathermap.org/data/2.5/uvi?appid=${appid}&lat=${coordinates[1]}&lon=${coordinates[0]}`)
         .then(r => r.json())
         .then(data => {
 
@@ -40,7 +41,7 @@ let coordinates = [];
         })
         .catch(e => console.error(e));
      
-        fetch(`http://api.openweathermap.org/data/2.5/forecast?appid=${appid}&lat=${coordinates[1]}&lon=${coordinates[0]}`)
+        fetch(`https://api.openweathermap.org/data/2.5/forecast?appid=${appid}&lat=${coordinates[1]}&lon=${coordinates[0]}`)
           .then(r => r.json())
           .then(({list}) => {
             
@@ -71,7 +72,7 @@ let coordinates = [];
             <div class="card horizontal blue">
             <div class="card-content black-text">  
                <h6><strong>${moment.unix(list[i].dt).format("MM/DD/YYYY")}</strong></h6> 
-               <img src="http://openweathermap.org/img/wn/${list[i].weather[0].icon}@2x.png" alt='${list[i].weather[0].description}' id='img'>
+               <img src="https://openweathermap.org/img/wn/${list[i].weather[0].icon}@2x.png" alt='${list[i].weather[0].description}' id='img'>
                <h6>Temp: ${tempFahr}°F</h6>
                <h6>Humidity: ${list[i].main.humidity}%</h6>
             </div>   
