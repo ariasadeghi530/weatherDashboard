@@ -145,4 +145,15 @@ document.getElementById('collections').addEventListener("click", event => {
   document.getElementById('search').click();
 })
 
+//click event for clear history
+document.getElementById('removeBtn').addEventListener('click', event => {
+  event.preventDefault();
+
+  //clear local storage
+  localStorage.clear();
+  
+  //remove searches from screen
+  document.getElementById('collections').innerHTML = '';
+  renderCities();
+})
 
