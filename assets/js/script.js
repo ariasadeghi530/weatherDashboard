@@ -142,7 +142,7 @@ document.getElementById('searchBtn').addEventListener('click', event => {
 //click event for search history
 document.getElementById('collections').addEventListener("click", event => {
   document.getElementById('search').value = localStorage.getItem(event.target.id);
-  document.getElementById('search').click();
+  document.getElementById('searchBtn').click();
 })
 
 //click event for clear history
