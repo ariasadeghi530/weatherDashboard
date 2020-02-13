@@ -29,20 +29,20 @@ renderCities();
 document.getElementById('searchBtn').addEventListener('click', event => {
 
   event.preventDefault();
-  
-  document.getElementById('cardItem').style.visibility = 'visible';
-
-//variable to store date to be used later in click event
-  let todayDate;
-
-  // empty array to store lon and lat to be used later in click event
-  let coordinates = [];
-
-  //first fetch for current weather
-  fetch(`https://api.openweathermap.org/data/2.5/weather?q=${document.getElementById('search').value}&appid=${appid}`)
+  if (!(document.getElementById('search').value === '' ) ){
+    
+    //variable to store date to be used later in click event
+    let todayDate;
+    
+    // empty array to store lon and lat to be used later in click event
+    let coordinates = [];
+    
+    //first fetch for current weather
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${document.getElementById('search').value}&appid=${appid}`)
     .then(r => r.json())
     .then(data => {
-
+      if (data.cod == 200) {
+      document.getElementById('cardItem').style.visibility = 'visible';
       //add coordinates to array
       coordinates.push(data.coord.lon);
       coordinates.push(data.coord.lat);
@@ -93,6 +93,7 @@ document.getElementById('searchBtn').addEventListener('click', event => {
           //create new cards
           let heading = document.createElement('h5');
           heading.textContent = '5-Day Forecast: ';
+          heading.id = 'header';
 
           document.getElementById('forecast').append(heading);
           
@@ -113,7 +114,7 @@ document.getElementById('searchBtn').addEventListener('click', event => {
               let forecastCard = document.createElement('div');
               let tempFahr = kelvinToFahrenheit(Number(list[i].main.temp))
 
-              forecastCard.classList = 'col s3';
+              forecastCard.classList = 'col s12 m3';
               forecastCard.innerHTML = `
             <div class="card horizontal blue">
             <div class="card-content black-text">  
@@ -132,10 +133,11 @@ document.getElementById('searchBtn').addEventListener('click', event => {
         })
 
         .catch(e => console.error(e));
+      }
     })
 
     .catch(e => console.error(e))
-
+  }
 })
 
 
