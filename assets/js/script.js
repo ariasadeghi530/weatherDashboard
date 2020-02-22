@@ -64,12 +64,13 @@ document.getElementById('searchBtn').addEventListener('click', event => {
       // add latest search to search history
       let cityLink = document.createElement('a');
       cityLink.innerHTML = `
-     <a href="#!" class="collection-item" id=${data.name}>${data.name}</a>
+     <a href="#!" class="collection-item" id="${data.name}">${data.name}</a>
      `;
-
+      if(!(document.getElementById(`${data.name}`))){
       document.getElementById('collections').append(cityLink);
       //set in local storage
       localStorage.setItem(`${data.name}`, `${data.name}`)
+      }
       //clear search bar
       document.getElementById('search').value = '';
 
